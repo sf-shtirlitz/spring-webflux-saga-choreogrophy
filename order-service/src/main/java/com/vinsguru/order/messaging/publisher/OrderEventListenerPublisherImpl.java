@@ -3,7 +3,7 @@ package com.vinsguru.order.messaging.publisher;
 import com.vinsguru.common.events.order.OrderEvent;
 import com.vinsguru.common.publisher.EventPublisher;
 import com.vinsguru.order.common.dto.PurchaseOrderDto;
-import com.vinsguru.order.common.service.OrderEventListener;
+import com.vinsguru.order.common.service.OrderEventEmitter;
 import com.vinsguru.order.messaging.mapper.OrderEventMapper;
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Flux;
@@ -13,7 +13,7 @@ import java.time.Duration;
 
 //@Service
 @RequiredArgsConstructor
-public class OrderEventListenerPublisherImpl implements OrderEventListener, EventPublisher<OrderEvent> {
+public class OrderEventListenerPublisherImpl implements OrderEventEmitter, EventPublisher<OrderEvent> {
 
     private final Sinks.Many<OrderEvent> sink;
     private final Flux<OrderEvent> flux;
@@ -25,11 +25,10 @@ public class OrderEventListenerPublisherImpl implements OrderEventListener, Even
 
     @Override
     public void emitOrderCreated(PurchaseOrderDto dto) {
-        var event = OrderEventMapper.toOrderCreatedEvent(dto);
+        OrderEvent event = OrderEventMapper.toOrderCreatedEvent(dto);
         this.sink.emitNext(
                 event,
                 Sinks.EmitFailureHandler.busyLooping(Duration.ofSeconds(1))
         );
     }
-
 }
