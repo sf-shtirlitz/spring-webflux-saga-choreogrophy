@@ -28,5 +28,5 @@ public class PurchaseOrder {
     private Instant deliveryDate;
 
     @Version
-    private Integer version;
+    private Integer version;//solves concurrency issues
 }

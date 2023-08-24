@@ -21,8 +21,8 @@ public interface PurchaseOrderRepository extends ReactiveCrudRepository<Purchase
                        order_inventory oi
                 WHERE  op.order_id = po.order_id
                        AND oi.order_id = po.order_id
-                       AND op.success
-                       AND oi.success
+                       AND op.success = true
+                       AND oi.success = true
                        AND po.status = 'PENDING'
                        AND po.order_id = :orderId
             """)
